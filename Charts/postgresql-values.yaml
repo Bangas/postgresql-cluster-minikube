@@ -1,0 +1,36 @@
+global:
+  postgresql:
+    postgresqlDatabase: testdb  # Database name
+    postgresqlUsername: dba_admin  # Admin user
+    postgresqlPassword: Password01  # Admin password
+
+postgresql:
+  primary:
+    persistence:
+      enabled: true
+      size: 5Gi  # Size of the primary PVC
+  replica:
+    persistence:
+      enabled: true
+      size: 5Gi  # Size of the replica PVCs
+
+  replication:
+    enabled: true  # Enable replication
+    primary:
+      walLevel: replica  # Set WAL level to 'replica' for replication
+      maxWalSenders: 3  # Allow up to 3 replication connections
+      hotStandby: true  # Allow read-only queries on replicas
+    replica:
+      # These settings are automatically handled, but you can adjust them if needed
+      enabled: true
+      synchronous: false  # Optional: you can set this to true if you want synchronous replication
+
+replicaCount: 4  # Total number of replicas (primary + 3 replicas)
+
+resources:
+  requests:
+    memory: 256Mi
+    cpu: 250m
+  limits:
+    memory: 512Mi
+    cpu: 500m

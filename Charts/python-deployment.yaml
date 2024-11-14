@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: python
+  template:
+    metadata:
+      labels:
+        app: python
+    spec:
+      containers:
+      - name: python
+        image: python:3.8-slim
+        command: ["tail", "-f", "/dev/null"]
+        volumeMounts:
+          - name: script-volume
+            mountPath: /scripts
+      volumes:
+        - name: script-volume
+          configMap:
+            name: python-scripts
